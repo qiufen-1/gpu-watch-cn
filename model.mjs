@@ -33,6 +33,11 @@ export function validateData(data, now = new Date()) {
   return data;
 }
 export function isStale(data, now = new Date()) { return !data.updatedAt || +now - Date.parse(data.updatedAt) > 36 * 3600000; }
+export function recordFreshness(data, now = new Date()) {
+  if (!data.observations.length) return 'empty';
+  if (isStale(data,now)) return 'stale';
+  return data.observations.some(o=>o.date===dayOf(now)) ? 'current' : 'prior-day';
+}
 export function recordState(o, observations) {
   const from = Date.parse(o.date + 'T00:00:00+08:00') - 30 * 86400000;
   const prior = observations.filter(x => x.productId === o.productId && x.conditionKey === o.conditionKey && x.region === o.region && x.stock === 'in_stock' && x.date < o.date && Date.parse(x.date + 'T00:00:00+08:00') >= from);

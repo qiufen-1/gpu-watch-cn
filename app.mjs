@@ -1,4 +1,4 @@
-import { BRANDS, GPUS, validateData, currentRows, series, dayOf, isStale } from './model.mjs';
+import { BRANDS, GPUS, validateData, currentRows, series, recordFreshness } from './model.mjs';
 const $=s=>document.querySelector(s);
 const money=n=>new Intl.NumberFormat('zh-CN',{minimumFractionDigits:n%100?2:0,maximumFractionDigits:2}).format(n/100);
 const time=s=>new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(s));
@@ -28,7 +28,8 @@ function renderStatus(){
   if(error){title='记录暂时读取失败';description='请点击“重新读取”再试一次。当前不展示无法确认的价格。';state.classList.add('error');}
   else if(!data.observations.length){title='价格数据待接入';description='网站已就绪，尚未连接授权价格数据源。目前没有真实报价或历史记录；接入后开始每日记录。';}
   else if(data.status==='error'){title='最近一次采集失败';description=`上次成功保存：${time(data.updatedAt)}。已有历史保留，今天未核实的价格不参与今日比较。`;state.classList.add('error');}
-  else if(isStale(data)){title='价格记录需要更新';description=`最新一批记录来自 ${time(data.updatedAt)}，已经超过 36 小时。旧记录只用于历史查看。`;}
+  else if(recordFreshness(data)==='stale'){title='价格记录需要更新';description=`最新一批记录来自 ${time(data.updatedAt)}，已经超过 36 小时。旧记录只用于历史查看。`;}
+  else if(recordFreshness(data)==='prior-day'){title='等待今天的价格更新';description=`最新一批记录来自 ${time(data.updatedAt)}。今天尚无已核实报价，旧记录只用于历史查看；计划上午 9 点发起更新。`;}
   else if(data.status==='partial'){title='部分商品已更新';description='本次未取得两类显卡的完整有货报价。以下只展示今天已核实的记录，未覆盖商品不代表无货。';}
   else{title='价格记录已更新';description='以下是北京地区今日已核实的有货报价。优惠因账号与活动而异，请核对每条价格的适用条件。';state.classList.add('ready');}
   state.innerHTML=`<span class="status-dot"></span><div><strong>${title}</strong><p>${esc(description)}</p></div>`;

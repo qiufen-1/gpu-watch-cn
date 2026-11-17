@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "source": "implemented CSS; manual documentation because engine unavailable",
+  "mode": "operate",
+  "tokens": {
+    "colors": {"ink":"#162e51","muted":"#52647c","line":"#dbe2ec","paper":"#f4f7fb","blue":"#244fbc","amber":"#805300","amberBackground":"#fff4d9","green":"#146548","red":"#a12b35"},
+    "radius": {"panel":"14px","control":"7px"},
+    "layout": {"contentMax":"1180px","wideContentMax":"1220px","mobileGutter":"16px","breakpoints":["600px","900px","1500px"]},
+    "typography": {"family":"system UI Chinese sans","body":"13px–15px","h1":"27px–36px","h2":"21px–23px","numeric":"tabular-nums"}
+  },
+  "verification": {"automatedTests":10,"parentBrowserWidths":[1170,400],"independentVisualVerdict":"recapture","rasterAssets":0}
+}

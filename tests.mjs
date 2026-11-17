@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { validateData, currentRows, series, conditionKey, recordState, dayOf } from './model.mjs';
+import { validateData, currentRows, series, conditionKey, recordState, dayOf, recordFreshness } from './model.mjs';
 import { mergeFeed } from './collect.mjs';
 const now=new Date('2026-11-17T01:05:00Z');
 const product={id:'100187310368',brand:'华硕',gpu:'RTX 5070 Ti',name:'测试专用型号，不发布',url:'https://item.jd.com/100187310368.html',selfOperated:true,ownershipVerifiedAt:'2026-11-17T01:00:00Z'};
@@ -27,6 +27,13 @@ test('仅今天有货报价进入概览，不能拿旧报价充当实时价',()=
 test('曲线不填补缺测，且价格单位保持为分',()=>{
   const values=series(snapshot([quote('2026-11-17',123456)]),'RTX 5070 Ti','','2026-11-17');
   assert.equal(values.length,30);assert.equal(values.filter(p=>p.priceFen!==null).length,1);assert.equal(values[29].priceFen,123456);
+});
+test('跨日九点前不能把昨天记录描述为今日更新',()=>{
+  const data=snapshot([quote('2026-11-17',123456)]);
+  assert.equal(recordFreshness(data,new Date('2026-11-17T23:00:00+08:00')),'current');
+  assert.equal(recordFreshness(data,new Date('2026-11-18T08:00:00+08:00')),'prior-day');
+  assert.equal(currentRows(data,{today:'2026-11-18'}).length,0);
+  assert.equal(recordFreshness(data,new Date('2026-11-19T08:00:00+08:00')),'stale');
 });
 test('拒绝非自营、伪造来源、错误地区和非法价格',()=>{
   const good=snapshot([quote('2026-11-17',123456)]);assert.doesNotThrow(()=>validateData(good,now));
