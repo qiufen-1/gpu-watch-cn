@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="只看京东自营的 RTX 5080 与 RTX 5070 Ti。北京地区，每日价格记录，优惠条件清楚可见。">
+  <meta name="theme-color" content="#162e51"><title>显卡观测站 · 京东自营价格记录</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.mjs"></script>
+</head>
+<body>
+<a class="skip" href="#main">跳到主要内容</a>
+<header class="topbar"><div class="wrap top-inner">
+  <a class="brand" href="./" aria-label="显卡观测站首页"><svg viewBox="0 0 28 28" aria-hidden="true"><rect x="3" y="6" width="22" height="16" rx="3"/><circle cx="11" cy="14" r="4"/><path d="M18 10h3m-3 4h3m-3 4h3M7 22v3m4-3v3"/></svg>显卡观测站</a>
+  <nav aria-label="主要导航"><a href="#overview">今日概览</a><a href="#trends">价格走势</a><a href="#compare">商品对比</a></nav>
+  <span class="region"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2"/></svg>北京</span>
+</div></header>
+<main id="main" class="wrap">
+  <section id="overview" aria-labelledby="title">
+    <div class="page-heading"><div><h1>今天，显卡降价了吗？</h1><p class="lead">只看京东自营，让每一次降价有据可查。</p></div><div class="update"><span>计划每日 09:00 更新 · 北京时间</span><strong id="updated">正在读取记录…</strong></div></div>
+    <div id="status" class="notice" role="status"><span class="status-dot"></span><div><strong>正在读取价格记录</strong><p>请稍候。</p></div></div>
+    <div class="scope-bar"><p>RTX 5080 / 5070 Ti <span>·</span> 11 个候选品牌 <span>·</span> 北京收货地区</p><button id="reload" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5M6 7a7 7 0 0 1 12-1l2 3M4 15l2 3a7 7 0 0 0 12-1"/></svg>重新读取</button></div>
+    <div class="price-summaries" id="summaries" aria-live="polite"></div>
+    <div class="filter-line"><label for="condition">优惠口径</label><select id="condition"><option value="">各商品最低已核实到手价</option></select><p>含条件的价格会逐项标明；下单以京东结算页为准。</p></div>
+  </section>
+  <section id="trends" aria-labelledby="trend-title"><div class="section-heading"><div><h2 id="trend-title">近 30 天，价格怎么走</h2><p>每天一个记录点。缺失日期留空，不补线、不补价。</p></div><span class="legend"><i></i>当日已核实最低价</span></div>
+    <div class="charts"><article class="chart-panel"><h3>RTX 5080</h3><div id="chart-5080" class="chart"></div></article><article class="chart-panel"><h3>RTX 5070 Ti</h3><div id="chart-5070" class="chart"></div></article></div>
+    <p class="chart-note">曲线代表当日符合筛选条件的最低价，最低价对应型号可能变化。判断“新低”时，只比较同一商品、相同优惠条件的历史记录。</p>
+  </section>
+  <section id="compare" aria-labelledby="compare-title"><div class="section-heading"><div><h2 id="compare-title">今天值得留意的型号</h2><p id="compare-subtitle">确认有货、价格可核实，才进入今日比较。</p></div></div>
+    <div class="compare-controls"><div class="tabs" role="group" aria-label="显卡类型"><button class="active" type="button" data-gpu="" aria-pressed="true">全部</button><button type="button" data-gpu="RTX 5080" aria-pressed="false">5080</button><button type="button" data-gpu="RTX 5070 Ti" aria-pressed="false">5070 Ti</button></div><label class="brand-filter">品牌<select id="brand"><option value="">全部品牌</option></select></label><label class="new-filter"><input type="checkbox" id="only-new">只看近期新低</label><label class="sort-filter">排序<select id="sort"><option value="price">到手价从低到高</option><option value="drop">较近期最低的降幅</option></select></label></div>
+    <div id="highlights" aria-live="polite"></div>
+    <details id="all-products"><summary><span>展开完整商品对比</span><span id="row-count">0 款</span></summary><div class="table-scroll" tabindex="0" role="region" aria-label="商品对比表，可横向滚动"><table><thead><tr><th scope="col">型号 / 品牌</th><th scope="col">到手价</th><th scope="col">优惠条件</th><th scope="col">同条件历史</th><th scope="col">采集时间</th><th scope="col">商品</th></tr></thead><tbody id="rows"></tbody></table></div></details>
+  </section>
+  <section class="explain" aria-labelledby="explain-title"><h2 id="explain-title">看价格前，先统一口径</h2><div class="explain-grid"><div><h3>低价，都带着条件看</h3><p>PLUS、优惠券、国补等要求会显示在价格旁。无法核实的优惠不算入到手价，不默认每个账号都能享受。</p></div><div><h3>新低，要有历史才算数</h3><p>首次采集只标“开始记录”。今天低于此前 30 天同商品、同条件的记录才标新低；无记录日期不参与比较。</p></div><div><h3>自营、有货，才参与比较</h3><p>仅纳入已核实的京东自营商品。北京库存未知、无货或今天未取得报价的商品，不参与今日最低价排名。</p></div></div><details class="coverage"><summary>查看候选品牌与数据说明</summary><p id="brands"></p><p>品牌不分“一二三线”。11 个品牌是候选范围，不代表每个品牌都有符合条件的在售型号。</p><p id="coverage-info">尚未接入授权价格数据源，没有真实报价或历史记录。</p><p>计划每天上午 9 点发起更新，托管平台可能延迟。重新读取只获取已保存记录，不会现场查询京东或调用 AI。</p></details></section>
+</main>
+<footer class="wrap footer"><span>显卡观测站 <span class="footer-domain">gpu.shenlii.cn</span></span><p>独立价格记录工具，与京东及显卡品牌无隶属关系。</p><a href="#main">回到顶部 ↑</a></footer>
+<noscript><div class="wrap notice">请启用 JavaScript，以查看价格状态、筛选商品和历史走势图。</div></noscript>
+</body></html>
